@@ -1,9 +1,10 @@
 # Install some dependencies
-- name: APT ; install libgl1-mesa-glx and xvfb
+- name: APT ; install libgl and xvfb
   become: true
   apt:
     pkg:
-      - libgl1-mesa-glx
+      - libgl1
+      - libglx-mesa0
       - xvfb
     state: present
     update_cache: yes
