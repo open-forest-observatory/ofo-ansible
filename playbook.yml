@@ -1,6 +1,6 @@
 ---
 
-- hosts: local
+- hosts: dev_testing
   gather_facts: false
   
   tasks:
