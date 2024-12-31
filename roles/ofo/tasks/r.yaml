@@ -1,0 +1,210 @@
+---
+# this, in part, is the add_cranapt_jammy.sh script, sourced here: https://github.com/eddelbuettel/r2u/blob/master/inst/scripts/add_cranapt_jammy.sh
+# this must be run before the conda install
+
+- name: APT_KEY | add the r repo key
+  become: true
+  apt_key:
+    url: https://cloud.r-project.org/bin/linux/ubuntu/marutter_pubkey.asc
+    state: present
+
+- name: APT_KEY | add the cran repo key
+  become: true
+  apt_key:
+    url: https://eddelbuettel.github.io/r2u/assets/dirk_eddelbuettel_key.asc
+    state: present
+
+- name: APT_REPOSITORY | add the r repo
+  become: true
+  ansible.builtin.apt_repository:
+    repo: "deb https://cloud.r-project.org/bin/linux/ubuntu jammy-cran40/"
+    state: present
+
+- name: APT_REPOSITORY | add the cran repo
+  become: true
+  ansible.builtin.apt_repository:
+    repo: "deb [arch=amd64] https://r2u.stat.illinois.edu/ubuntu jammy main"
+    state: present
+
+- name: APT_KEY ; add some key
+  become: true
+  ansible.builtin.apt_key:
+    keyserver: keyserver.ubuntu.com
+    id: 67C2D66C4B1D4339
+
+- name: APT_KEY ; add some other key
+  become: true
+  ansible.builtin.apt_key:
+    keyserver: keyserver.ubuntu.com
+    id: 51716619E084DAB9
+
+- name: APT ; install r packages
+  become: true
+  apt:
+    pkg:
+      - r-base
+      - r-base-dev
+      - r-base-core
+      - rclone
+      - wget
+      - ca-certificates
+    state: present
+    update_cache: yes
+    install_recommends: false
+  register: apt_result
+  until: apt_result is not failed
+  retries: 30
+  delay: 10
+
+- name: APT ; install rstudio from remote deb
+  become: true
+  apt:
+    deb: "{{ RSTUDIO_SERVER_DOWNLOAD_URL }}"
+  register: apt_result
+  until: apt_result is not failed
+  retries: 30
+  delay: 10
+
+- name: LINEINFILE ; ensure RSTUDIO_WHICH_R in .profile
+  ansible.builtin.lineinfile:
+    path: ~/.profile
+    line: 'export RSTUDIO_WHICH_R="/usr/lib/R/bin/R"'
+
+- name: COPY ; copy /etc/apt/preferences.d/99cranapt
+  become: true
+  copy:
+    src: 99cranapt
+    dest: /etc/apt/preferences.d/99cranapt
+
+- name: APT ; install python3 packages
+  become: true
+  apt:
+    pkg:
+      - python3-dbus
+      - python3-gi
+      - python3-apt
+    state: present
+    update_cache: yes
+  register: apt_result
+  until: apt_result is not failed
+  retries: 30
+  delay: 10
+
+- name: APT ; install r packages
+  become: true
+  apt:
+    pkg:
+      -  r-cran-arrow
+      -  r-cran-brms
+      -  r-cran-coda
+      -  r-cran-cowplot
+      -  r-cran-data.table
+      -  r-cran-dbplyr
+      -  r-cran-devtools
+      -  r-cran-dt
+      -  r-cran-duckdb
+      -  r-cran-elevatr
+      -  r-cran-exifr
+      -  r-cran-foresttools
+      -  r-cran-fs
+      -  r-cran-furrr
+      -  r-cran-ggally
+      -  r-cran-ggeffects
+      -  r-cran-ggpubr
+      -  r-cran-ggrepel
+      -  r-cran-ggspatial
+      -  r-cran-gitcreds
+      -  r-cran-gh
+      -  r-cran-glue
+      -  r-cran-here
+      -  r-cran-httpgd
+      -  r-cran-httr
+      -  r-cran-janitor
+      -  r-cran-jsonlite
+      -  r-cran-knitr
+      -  r-cran-languageserver
+      -  r-cran-leaflet
+      -  r-cran-lidr
+      -  r-cran-lintr
+      -  r-cran-lme4
+      -  r-cran-loo
+      -  r-cran-lubridate
+      -  r-cran-magick
+      -  r-cran-maptools
+      -  r-cran-mgcv
+      -  r-cran-mgcviz
+      -  r-cran-nlme
+      -  r-cran-nnet
+      -  r-cran-nngeo
+      -  r-cran-openssl
+      -  r-cran-pkgdown
+      -  r-cran-raster
+      -  r-cran-readxl
+      -  r-cran-remotes
+      -  r-cran-rnaturalearth
+      -  r-cran-roxygen2
+      -  r-cran-rstan
+      -  r-cran-scales
+      -  r-cran-sf
+      -  r-cran-shiny
+      -  r-cran-shinystan
+      -  r-cran-slippymath
+      -  r-cran-smoothr
+      -  r-cran-spatial
+      -  r-cran-spatialeco
+      -  r-cran-stringr
+      -  r-cran-suncalc
+      -  r-cran-terra
+      -  r-cran-testthat
+      -  r-cran-tictoc
+      -  r-cran-tidyverse
+      -  r-cran-tidyterra
+      -  r-cran-units
+      -  r-cran-usethis
+      -  r-cran-viridis
+      -  r-cran-vroom
+      -  r-cran-xml2
+      -  r-cran-yaml
+      -  r-cran-zip
+      -  r-cran-zoo
+    state: present
+  register: apt_result
+  until: apt_result is not failed
+  retries: 30
+  delay: 10
+  when: INSTALL_R_PACKAGES | bool
+  
+- name: SHELL ; use Rscript to install bspm
+  become: true
+  shell: Rscript -e 'install.packages("bspm")'
+
+- name: SHELL ; use Rscript to install vscDegugger
+  become: true
+  shell: R -e "remotes::install_github('ManuelHentschel/vscDebugger')"
+  when: INSTALL_R_PACKAGES | bool
+
+- name: LINEINFILE ; ensure suppressMessages in /usr/lib/R/etc/Rprofile.site
+  ansible.builtin.lineinfile:
+    path: /usr/lib/R/etc/Rprofile.site
+    line: 'suppressMessages(bspm::enable())'
+  become: true
+
+- name: PIP ; use PIP to install radian R terminal
+  become: false
+  pip:
+    name: radian
+    state: present
+
+- name: LINK ; put symlink to radian binary in /opt/
+  become: true
+  file:
+    src: "/home/{{ ansible_user_id }}/.local/bin/radian"
+    path: /opt/radian
+    state: link
+
+- name: FILE ; set the owner of /usr/local/lib/R/site-library to the ACCESS user, not root
+  become: true
+  file:
+    path: "/usr/local/lib/R/site-library"
+    owner: "{{ ansible_user_id }}"
+    group: "{{ ansible_user_id }}"

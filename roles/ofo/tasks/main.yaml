@@ -1,0 +1,25 @@
+---
+# # https://raw.githubusercontent.com/open-forest-observatory/environments/main/jetstream/jetstream-vm-setup.sh
+# - include_tasks: git_config.yaml
+# - include_tasks: ofo-share.yaml
+# - include_tasks: irods.yaml
+# - include_tasks: ssh_timeout.yaml
+# - include_tasks: geograypher.yaml
+# - include_tasks: qgis.yaml
+# - include_tasks: chromium.yaml
+# - include_tasks: r.yaml
+# - include_tasks: anaconda.yaml
+# - include_tasks: metashape.yaml
+# - include_tasks: sublime.yaml
+# - include_tasks: jupyter.yaml
+# - include_tasks: ssl.yaml
+
+- name: LINEINFILE ; ensure alias ls='ls --color=auto' in .bashrc
+  ansible.builtin.lineinfile:
+    path: ~/.bashrc
+    line: "alias ls='ls --color=auto'"
+
+- name: LINEINFILE ; set up GPG as needed for YADM (https://mroldan.medium.com/gpg-symmetric-encryption-of-stdin-failed-operation-cancelled-f6c1bd90be9d)
+  ansible.builtin.lineinfile:
+    path: ~/.profile
+    line: 'export GPG_TTY=$(tty)'
