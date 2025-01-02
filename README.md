@@ -4,6 +4,7 @@ Ansible configurations for OFO VM setup
 To run this *from* a new Jetstream2 VM that you want to configure (the standard OFO use-case):
 
 ```
+sudo add-apt-repository --yes --update ppa:ansible/ansible
 sudo apt-get install ansible-core
 ansible-galaxy collection install ansible.posix
 ansible-pull -U https://github.com/open-forest-observatory/ofo-ansible -i inventory
