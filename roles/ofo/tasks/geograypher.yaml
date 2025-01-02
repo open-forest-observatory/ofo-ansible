@@ -10,5 +10,5 @@
     update_cache: yes
   register: apt_result
   until: apt_result is not failed
-  retries: 30
+  retries: 2
   delay: 10

@@ -38,7 +38,7 @@
     keyserver: keyserver.ubuntu.com
     id: 51716619E084DAB9
 
-- name: APT ; install r packages
+- name: APT ; install ubuntu r packages
   become: true
   apt:
     pkg:
@@ -53,7 +53,7 @@
     install_recommends: false
   register: apt_result
   until: apt_result is not failed
-  retries: 30
+  retries: 2
   delay: 10
 
 - name: APT ; install rstudio from remote deb
@@ -62,7 +62,7 @@
     deb: "{{ RSTUDIO_SERVER_DOWNLOAD_URL }}"
   register: apt_result
   until: apt_result is not failed
-  retries: 30
+  retries: 2
   delay: 10
 
 - name: LINEINFILE ; ensure RSTUDIO_WHICH_R in .profile
@@ -87,10 +87,10 @@
     update_cache: yes
   register: apt_result
   until: apt_result is not failed
-  retries: 30
+  retries: 2
   delay: 10
 
-- name: APT ; install r packages
+- name: APT ; install r extension packages
   become: true
   apt:
     pkg:
@@ -170,7 +170,7 @@
     state: present
   register: apt_result
   until: apt_result is not failed
-  retries: 30
+  retries: 3
   delay: 10
   when: INSTALL_R_PACKAGES | bool
   
