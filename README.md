@@ -7,7 +7,7 @@ To run this *from* a new Jetstream2 VM that you want to configure (the standard 
 sudo add-apt-repository --yes --update ppa:ansible/ansible
 sudo apt-get install ansible-core -y
 ansible-galaxy collection install ansible.posix
-ansible-pull -U https://github.com/open-forest-observatory/ofo-ansible -i inventory
+ansible-pull -U https://github.com/open-forest-observatory/ofo-ansible -i inventory -e CREDS_PASSWORD=<password>
 ```
 
 If you want to specify a branch of the repo other than `main`, add `-C <branchname>`.
