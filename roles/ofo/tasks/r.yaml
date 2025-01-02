@@ -1,6 +1,5 @@
 ---
-# this, in part, is the add_cranapt_jammy.sh script, sourced here:
-# https://github.com/eddelbuettel/r2u/blob/master/inst/scripts/add_cranapt_jammy.sh, updated for noble
+# this, in part, is the add_cranapt_jammy.sh script, sourced here: https://github.com/eddelbuettel/r2u/blob/master/inst/scripts/add_cranapt_jammy.sh
 # this must be run before the conda install
 
 - name: APT_KEY | add the r repo key
@@ -18,13 +17,13 @@
 - name: APT_REPOSITORY | add the r repo
   become: true
   ansible.builtin.apt_repository:
-    repo: "deb https://cloud.r-project.org/bin/linux/ubuntu noble-cran40/"
+    repo: "deb https://cloud.r-project.org/bin/linux/ubuntu jammy-cran40/"
     state: present
 
 - name: APT_REPOSITORY | add the cran repo
   become: true
   ansible.builtin.apt_repository:
-    repo: "deb [arch=amd64] https://r2u.stat.illinois.edu/ubuntu noble main"
+    repo: "deb [arch=amd64] https://r2u.stat.illinois.edu/ubuntu jammy main"
     state: present
 
 - name: APT_KEY ; add some key
@@ -54,7 +53,7 @@
     install_recommends: false
   register: apt_result
   until: apt_result is not failed
-  retries: 2
+  retries: 30
   delay: 10
 
 - name: APT ; install rstudio from remote deb
@@ -171,7 +170,7 @@
     state: present
   register: apt_result
   until: apt_result is not failed
-  retries: 2
+  retries: 30
   delay: 10
   when: INSTALL_R_PACKAGES | bool
   
