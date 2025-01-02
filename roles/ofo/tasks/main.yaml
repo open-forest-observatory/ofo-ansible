@@ -3,44 +3,20 @@
 - name: SET_FACT; set python interpreter
   ansible.builtin.set_fact: ansible_python_interpreter="/usr/bin/python3"
 
-# - name: WAIT_FOR; Wait for ssh to be avaliable and connect
-#   ansible.builtin.wait_for:
-#     port: 22
-#     host: '{{ (ansible_ssh_host|default(ansible_host))|default(inventory_hostname) }}'
-#     search_regex: OpenSSH
-#     delay: 10
-#     timeout: 600
-#   connection: local
-
-# # wait for 1 minute after establishing a connection
-# - name: PAUSE; because Jetstream 2 networking
-#   ansible.builtin.pause:
-#     seconds: 10
-
 - name: SETUP; gathering facts
   ansible.builtin.setup:
     gather_timeout: 60
 
-- name: LINEINFILE ; ensure alias ls='ls --color=auto' in .bashrc
-  ansible.builtin.lineinfile:
-    path: ~/.bashrc
-    line: "alias ls='ls --color=auto'"
-
-- name: LINEINFILE ; set up GPG as needed for YADM (https://mroldan.medium.com/gpg-symmetric-encryption-of-stdin-failed-operation-cancelled-f6c1bd90be9d)
-  ansible.builtin.lineinfile:
-    path: ~/.profile
-    line: 'export GPG_TTY=$(tty)'
-
+- include_tasks: misc.yaml
 - include_tasks: git_config.yaml
 - include_tasks: ofo-share.yaml
-# - include_tasks: irods.yaml
+- include_tasks: irods.yaml
 - include_tasks: ssh_timeout.yaml
 - include_tasks: geograypher.yaml
 - include_tasks: qgis.yaml
-# - include_tasks: chromium.yaml
 - include_tasks: r.yaml
-# - include_tasks: anaconda.yaml
-# - include_tasks: metashape.yaml
-# - include_tasks: sublime.yaml
-# - include_tasks: jupyter.yaml
-# - include_tasks: ssl.yaml
+- include_tasks: anaconda.yaml
+- include_tasks: metashape.yaml
+- include_tasks: sublime.yaml
+- include_tasks: jupyter.yaml
+- include_tasks: rstudio_ssl.yaml

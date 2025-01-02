@@ -1,47 +1,49 @@
 ---
 
-- name: GET_URL ; download Anaconda3
+- name: GET_URL ; download miniconda installer
   become: true
   get_url:
-    url: https://repo.anaconda.com/archive/{{ ANACONDA3_VERSION }}.sh
-    dest: /tmp/{{ ANACONDA3_VERSION }}.sh
+    url: https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+    dest: /tmp/Miniconda3-latest-Linux-x86_64.sh
     mode: 775
 
-- name: SHELL ; run anaconda3 installer
+- name: SHELL ; run miniconda installer
   shell:
-    cmd: /tmp/{{ ANACONDA3_VERSION }}.sh -b
+    cmd: /tmp/Miniconda3-latest-Linux-x86_64.sh -b
   args:
-    creates: ~/anaconda3
+    creates: ~/miniconda3
 
 - name: SHELL ; run conda init
   shell:
-    cmd: ~/anaconda3/bin/conda init
+    cmd: ~/miniconda3/bin/conda init
   args:
     executable: /bin/bash
 
-- name: SHELL ; update conda & anaconda
+- name: SHELL ; update conda & miniconda
   shell:
-    cmd: ~/anaconda3/bin/conda update --all
+    cmd: ~/miniconda3/bin/conda update --all --yes
   args:
     executable: /bin/bash
 
-- name: SHELL ; run conda activate and install nb_conda_kernels
+- name: SHELL ; conda install nb_conda_kernels
   shell:
-    cmd: ~/anaconda3/bin/conda install -n base nb_conda_kernels --yes
+    cmd: ~/miniconda3/bin/conda install -n base notebook nb_conda_kernels --yes
   args:
     executable: /bin/bash
 
 - name: SHELL ; run conda create --name meta python=3.11 PyYaml ipykernel
   shell:
-    cmd: ~/anaconda3/bin/conda create --name meta python=3.11 PyYaml ipykernel --yes
+    cmd: ~/miniconda3/bin/conda create --name meta python=3.11 PyYaml ipykernel --yes
+  args:
+    creates: ~/miniconda3/envs/meta
 
 # Configure conda to use the user's envs and pkgs directory (so that others the user adds later will
 # be searched secondarily). This is setup is required for Geograypher.
 
-- name: SHELL ; run conda config --append envs_dirs ~/anaconda3/envs
+- name: SHELL ; run conda config --append envs_dirs ~/miniconda3/envs
   shell:
-    cmd: ~/anaconda3/bin/conda config --append envs_dirs ~/anaconda3/envs
+    cmd: ~/miniconda3/bin/conda config --append envs_dirs ~/miniconda3/envs
     
-- name: SHELL ; run conda config --append pkgs_dirs ~/anaconda3/pkgs
+- name: SHELL ; run conda config --append pkgs_dirs ~/miniconda3/pkgs
   shell:
-    cmd: ~/anaconda3/bin/conda config --append envs_dirs ~/anaconda3/pkgs
+    cmd: ~/miniconda3/bin/conda config --append envs_dirs ~/miniconda3/pkgs

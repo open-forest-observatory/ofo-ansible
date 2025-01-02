@@ -10,5 +10,3 @@
   loop:
     - { key: "ClientAliveInterval", value: "300" }
     - { key: "ClientAliveCountMax", value: "36" }
-  # notify:
-    # - restart sshd

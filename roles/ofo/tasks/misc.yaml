@@ -1,0 +1,10 @@
+- name: LINEINFILE ; ensure alias ls='ls --color=auto' in .bashrc
+  ansible.builtin.lineinfile:
+    path: ~/.bashrc
+    line: "alias ls='ls --color=auto'"
+
+- name: LINEINFILE ; set up GPG as needed for YADM (https://mroldan.medium.com/gpg-symmetric-encryption-of-stdin-failed-operation-cancelled-f6c1bd90be9d)
+  ansible.builtin.lineinfile:
+    path: ~/.profile
+    line: 'export GPG_TTY=$(tty)'
+    

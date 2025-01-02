@@ -34,7 +34,7 @@
     state: present
   register: apt_result
   until: apt_result is not failed
-  retries: 30
+  retries: 2
   delay: 10
   
 - name: LINEINFILE ; ensure AGISOFT_FLS (floating license server) env var in .profile
@@ -42,9 +42,8 @@
     path: ~/.profile
     line: 'export AGISOFT_FLS={{ METASHAPE_LICENSE_SERVER_IP }}:5842'
 
-- name: SHELL ; run conda activate and pip for meta envt
+- name: SHELL ; install metashape module in meta conda env
   shell:
-    cmd: "~/anaconda3/bin/conda run -n meta pip install {{ METASHAPE_PRO_WHL_MODULE }}"
+    cmd: "~/miniconda3/bin/conda run -n meta pip install {{ METASHAPE_PRO_WHL_MODULE }}"
   args:
     executable: /bin/bash
-    

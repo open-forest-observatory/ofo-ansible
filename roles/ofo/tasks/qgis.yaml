@@ -6,11 +6,17 @@
     dest: /etc/apt/keyrings/qgis-archive-keyring.gpg 
   become: true
 
-- name: COPY ; copy /etc/apt/sources.list.d/qgis.sources
+# - name: COPY ; copy /etc/apt/sources.list.d/qgis.sources
+#   become: true
+#   copy:
+#     src: qgis.sources_{{ ansible_distribution_release }}
+#     dest: /etc/apt/sources.list.d/qgis.sources
+    
+- name: TEMPLATE ; template the qgis.sources file
   become: true
-  copy:
-    src: qgis.sources_{{ ansible_distribution_release }}
-    dest: /etc/apt/sources.list.d/qgis.sources
+  template:
+    src: "qgis.sources.j2"
+    dest: "/etc/apt/sources.list.d/qgis.sources"
 
 - name: APT ; install qgis
   become: true
