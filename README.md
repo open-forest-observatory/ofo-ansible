@@ -5,6 +5,7 @@ To run this *from* a new Jetstream2 VM that you want to configure (the standard 
 
 ```
 sudo apt-get install ansible-core
+ansible-galaxy collection install ansible.posix
 ansible-pull -U https://github.com/open-forest-observatory/ofo-ansible -i inventory
 ```
 
