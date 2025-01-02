@@ -2,4 +2,4 @@
 149.165.173.109 ansible_user=exouser
 
 [local]
-127.0.0.1
+127.0.0.1 ansible_user=exouser
