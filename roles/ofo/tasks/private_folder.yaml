@@ -1,0 +1,79 @@
+# Set up a private folder for user to store credentials, move credentials files to this folder, and
+# create symlinks pointing to this folder
+
+- name: APT ; install ecryptfs-utils
+  become: true
+  apt:
+    pkg:
+      - ecryptfs-utils
+    state: present
+    update_cache: yes
+  register: apt_result
+  until: apt_result is not failed
+  retries: 2
+  delay: 10
+  
+- name: SHELL ; run 'ecryptfs-setup-private -u {{ ansible_user }} -l {{ CREDS_PASSWORD }} -m {{ CREDS_PASSWORD }}'
+  shell:
+    cmd: ecryptfs-setup-private -u {{ ansible_user }} -l {{ CREDS_PASSWORD }} -m {{ CREDS_PASSWORD }}
+  args:
+    executable: /bin/bash
+    creates: ~/Private                                                                                 
+
+
+
+
+
+
+
+
+
+# ## EXAMPLES FOR SYNTAX
+
+# - name: GET_URL ; download miniconda installer
+#   become: true
+#   get_url:
+#     url: https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
+#     dest: /tmp/Miniconda3-latest-Linux-x86_64.sh
+#     mode: 775
+
+# - name: SHELL ; run miniconda installer
+#   shell:
+#     cmd: /tmp/Miniconda3-latest-Linux-x86_64.sh -b
+#   args:
+#     creates: ~/miniconda3
+
+# - name: SHELL ; run conda init
+#   shell:
+#     cmd: ~/miniconda3/bin/conda init
+#   args:
+#     executable: /bin/bash
+
+# - name: SHELL ; update conda & miniconda
+#   shell:
+#     cmd: ~/miniconda3/bin/conda update --all --yes
+#   args:
+#     executable: /bin/bash
+
+# - name: SHELL ; conda install nb_conda_kernels
+#   shell:
+#     cmd: ~/miniconda3/bin/conda install -n base notebook nb_conda_kernels --yes
+#   args:
+#     executable: /bin/bash
+
+# - name: SHELL ; run conda create --name meta python=3.11 PyYaml ipykernel
+#   shell:
+#     cmd: ~/miniconda3/bin/conda create --name meta python=3.11 PyYaml ipykernel --yes
+#   args:
+#     creates: ~/miniconda3/envs/meta
+
+# # Configure conda to use the user's envs and pkgs directory (so that others the user adds later will
+# # be searched secondarily). This is setup is required for Geograypher.
+
+# - name: SHELL ; run conda config --append envs_dirs ~/miniconda3/envs
+#   shell:
+#     cmd: ~/miniconda3/bin/conda config --append envs_dirs ~/miniconda3/envs
+    
+# - name: SHELL ; run conda config --append pkgs_dirs ~/miniconda3/pkgs
+#   shell:
+#     cmd: ~/miniconda3/bin/conda config --append envs_dirs ~/miniconda3/pkgs

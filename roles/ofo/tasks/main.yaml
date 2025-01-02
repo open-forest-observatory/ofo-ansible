@@ -20,3 +20,4 @@
 - include_tasks: sublime.yaml
 - include_tasks: jupyter.yaml
 - include_tasks: rstudio_ssl.yaml
+- include_tasks: private_folder.yaml
