@@ -10,3 +10,9 @@
   loop:
     - { key: "ClientAliveInterval", value: "300" }
     - { key: "ClientAliveCountMax", value: "36" }
+
+- name: restart sshd
+  service:
+    name: sshd.service
+    state: restarted
+  become: true
