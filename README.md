@@ -5,7 +5,7 @@ To run this *from* a new Jetstream2 VM that you want to configure (the standard 
 
 ```
 sudo apt-get install ansible-core
-ansible-pull ansible-pull -U https://github.com/open-forest-observatory/ofo-ansible -i inventory
+ansible-pull -U https://github.com/open-forest-observatory/ofo-ansible -i inventory
 ```
 
 If you want to specify a branch of the repo other than `main`, add `-C <branchname>`.
