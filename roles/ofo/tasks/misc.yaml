@@ -7,4 +7,16 @@
   ansible.builtin.lineinfile:
     path: ~/.profile
     line: 'export GPG_TTY=$(tty)'
-    
+
+- name: APT ; install rclone
+  become: true
+  apt:
+    pkg:
+      - rclone
+    state: present
+    update_cache: yes
+  register: apt_result
+  until: apt_result is not failed
+  retries: 2
+  delay: 10
+  
