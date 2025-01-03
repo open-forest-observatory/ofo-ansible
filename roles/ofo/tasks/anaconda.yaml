@@ -46,4 +46,4 @@
     
 - name: SHELL ; run conda config --append pkgs_dirs ~/miniconda3/pkgs
   shell:
-    cmd: ~/miniconda3/bin/conda config --append envs_dirs ~/miniconda3/pkgs
+    cmd: ~/miniconda3/bin/conda config --append pkgs_dirs ~/miniconda3/pkgs
