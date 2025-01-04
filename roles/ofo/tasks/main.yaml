@@ -23,10 +23,10 @@
     - sublime.yaml
     - jupyter.yaml
     - rstudio_ssl.yaml
-  when: RUN_MAIN==true
+  when: RUN_MAIN == yes
 
 - name: INCLUDE_TASKS ; run tasks for private folder setup
   include_tasks: "{{ item }}"
   loop:
     - private_folder.yaml
-  when: RUN_PRIVATE==true
+  when: RUN_PRIVATE == yes
