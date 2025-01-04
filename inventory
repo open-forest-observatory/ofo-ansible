@@ -1,5 +1,5 @@
-[dev_testing]
-149.165.168.162 ansible_user=exouser
+[remote]
+149.165.171.212 ansible_user=exouser
 
 [local]
 127.0.0.1 ansible_user=exouser

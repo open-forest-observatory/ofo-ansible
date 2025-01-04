@@ -7,17 +7,26 @@
   ansible.builtin.setup:
     gather_timeout: 60
 
-- include_tasks: misc.yaml
-- include_tasks: git_config.yaml
-- include_tasks: ofo-share.yaml
-- include_tasks: irods.yaml
-- include_tasks: ssh_timeout.yaml
-- include_tasks: geograypher.yaml
-- include_tasks: qgis.yaml
-- include_tasks: r.yaml
-- include_tasks: anaconda.yaml
-- include_tasks: metashape.yaml
-- include_tasks: sublime.yaml
-- include_tasks: jupyter.yaml
-- include_tasks: rstudio_ssl.yaml
-# - include_tasks: private_folder.yaml
+- name: INCLUDE_TASKS ; run tasks for primary dev machine setup
+  include_tasks: "{{ item }}"
+  loop:
+    - misc.yaml
+    - git_config.yaml
+    - ofo-share.yaml
+    - irods.yaml
+    - ssh_timeout.yaml
+    - geograypher.yaml
+    - qgis.yaml
+    - r.yaml
+    - anaconda.yaml
+    - metashape.yaml
+    - sublime.yaml
+    - jupyter.yaml
+    - rstudio_ssl.yaml
+  when: RUN_MAIN
+
+- name: INCLUDE_TASKS ; run tasks for private folder setup
+  include_tasks: "{{ item }}"
+  loop:
+    - private_folder.yaml
+  when: RUN_PRIVATE
