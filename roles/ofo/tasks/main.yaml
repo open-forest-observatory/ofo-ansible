@@ -10,11 +10,11 @@
 - name: INCLUDE_TASKS ; run tasks for primary dev machine setup
   include_tasks: "{{ item }}"
   loop:
+    - ssh_timeout.yaml
     - misc.yaml
     - git_config.yaml
     - ofo-share.yaml
     - irods.yaml
-    - ssh_timeout.yaml
     - geograypher.yaml
     - qgis.yaml
     - r.yaml
