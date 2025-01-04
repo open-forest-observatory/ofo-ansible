@@ -8,11 +8,12 @@
     path: ~/.profile
     line: 'export GPG_TTY=$(tty)'
 
-- name: APT ; install rclone
+- name: APT ; install rclone and ansible
   become: true
   apt:
     pkg:
       - rclone
+      - ansible-core
     state: present
     update_cache: yes
   register: apt_result
