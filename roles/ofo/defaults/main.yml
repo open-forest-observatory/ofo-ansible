@@ -1,7 +1,7 @@
 ---
 # CEPH_DIR: /etc/ceph
-RUN_MAIN: yes
-RUN_PRIVATE: no
+RUN_MAIN: 'yes'
+RUN_PRIVATE: 'no'
 INSTALL_R_PACKAGES: true
 METASHAPE_LICENSE_SERVER_IP: 10.0.205.233
 LIBSSL_DEB: libssl1.1_1.1.0g-2ubuntu4_amd64.deb
