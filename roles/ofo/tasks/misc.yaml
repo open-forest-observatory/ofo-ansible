@@ -20,4 +20,11 @@
   until: apt_result is not failed
   retries: 2
   delay: 10
-  
+
+- name: COPY ; copy setup-private-folder.sh script
+  become: true
+  copy:
+    src: setup-private-folder.sh
+    dest: /opt/setup-private-folder.sh
+    mode: 0744
+    owner: "{{ ansible_user }}"

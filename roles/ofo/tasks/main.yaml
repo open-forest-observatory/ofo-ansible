@@ -28,5 +28,5 @@
 - name: INCLUDE_TASKS ; run tasks for private folder setup
   include_tasks: "{{ item }}"
   loop:
-    - private_folder.yaml
+    - setup_private_folder.yaml
   when: RUN_PRIVATE == 'yes'
