@@ -39,7 +39,7 @@ If you want to specifically (and only) set up an encrypted private folder on an 
 ```
 ansible-pull -U https://github.com/open-forest-observatory/ofo-ansible -i inventory -e RUN_MAIN=no -e RUN_PRIVATE=yes -e CREDS_PASSWORD=<password>
 ```
-but replacing `<password>` with a password you will remember to decrypt your private folder. For details on the private folder usage, see [OFO internal documentation](https://docs.openforestobservatory.org/internal-docs/jetstream).
+but replacing `<password>` with a password you will remember to decrypt your private folder. For details on the private folder usage, see [OFO internal documentation](https://docs.openforestobservatory.org/internal-docs/jetstream/#private-encrypted-folder).
 
 During development, the "pull" model can make iteration slow because you have to commit and push to the repo
 before you can pull from the remote host. The repo is set up to additionally support the more
