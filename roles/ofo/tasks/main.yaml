@@ -12,7 +12,6 @@
   loop:
     - ssh_timeout.yaml
     - misc.yaml
-    - git_config.yaml
     - ofo-share.yaml
     - irods.yaml
     - geograypher.yaml
