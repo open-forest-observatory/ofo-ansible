@@ -37,10 +37,26 @@
   retries: 2
   delay: 10
   
+- name: Add kisak/kisak-mesa PPA (for latest mesa drivers, desired by Metashape)
+  apt_repository:
+    repo: "ppa:kisak/kisak-mesa"
+    state: present
+    update_cache: yes
+  become: yes
+
+# required for the python module license
 - name: LINEINFILE ; ensure AGISOFT_FLS (floating license server) env var in .profile
   ansible.builtin.lineinfile:
     path: ~/.profile
     line: 'export AGISOFT_FLS={{ METASHAPE_LICENSE_SERVER_IP }}:5842'
+  
+# required for the GUI license
+- name: TEMPLATE ; template the server.lic file for Metashape floating license
+  become: true
+  template:
+    src: "server.lic.j2"
+    dest: "/opt/metashape-pro/server.lic"
+    mode: 0755
 
 - name: SHELL ; install metashape module in meta conda env
   shell:

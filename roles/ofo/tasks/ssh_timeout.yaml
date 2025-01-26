@@ -13,8 +13,8 @@
   loop_control:
     loop_var: keyval
 
-- name: restart sshd
+- name: restart ssh
   service:
-    name: sshd.service
+    name: ssh.service
     state: restarted
   become: true

@@ -17,13 +17,13 @@
 - name: APT_REPOSITORY | add the r repo
   become: true
   ansible.builtin.apt_repository:
-    repo: "deb https://cloud.r-project.org/bin/linux/ubuntu jammy-cran40/"
+    repo: "deb https://cloud.r-project.org/bin/linux/ubuntu noble-cran40/"
     state: present
 
 - name: APT_REPOSITORY | add the cran repo
   become: true
   ansible.builtin.apt_repository:
-    repo: "deb [arch=amd64] https://r2u.stat.illinois.edu/ubuntu jammy main"
+    repo: "deb [arch=amd64] https://r2u.stat.illinois.edu/ubuntu noble main"
     state: present
 
 - name: APT_KEY ; add some key
@@ -38,23 +38,28 @@
     keyserver: keyserver.ubuntu.com
     id: 51716619E084DAB9
 
-- name: APT ; install ubuntu r packages
+# - name: APT ; install ubuntu r packages
+#   become: true
+#   apt:
+#     pkg:
+#       - r-base/noble-cran40
+#       - r-base-dev/noble-cran40
+#       - r-base-core/noble-cran40
+#     state: present
+#     update_cache: yes
+#     install_recommends: false
+#   register: apt_result
+#   until: apt_result is not failed
+#   retries: 2
+#   delay: 10
+  
+# Turn the above into a shell call made through ansible since Ansible does not seem able to be tols
+# which repository to get r-base from, and this is necessary because on the JS2 featured U24 image,
+# the default repository is the wrong one and doesn't have the correct version of R
+- name: SHELL ; install ubuntu r packages
   become: true
-  apt:
-    pkg:
-      - r-base
-      - r-base-dev
-      - r-base-core
-      - rclone
-      - wget
-      - ca-certificates
-    state: present
-    update_cache: yes
-    install_recommends: false
-  register: apt_result
-  until: apt_result is not failed
-  retries: 2
-  delay: 10
+  shell: apt-get install -y r-base/noble-cran40 r-base-dev/noble-cran40 r-base-core/noble-cran40
+
 
 - name: APT ; install rstudio from remote deb
   become: true
@@ -189,16 +194,23 @@
     line: 'suppressMessages(bspm::enable())'
   become: true
 
-- name: PIP ; use PIP to install radian R terminal
-  become: false
-  pip:
-    name: radian
-    state: present
+# - name: PIP ; use PIP to install radian R terminal
+#   become: false
+#   pip:
+#     name: radian
+#     state: present
+
+- name: SHELL ; install radian module in base conda env (and its gcc dependency)
+  shell:
+    cmd: "~/miniconda3/bin/conda install -y -c conda-forge gcc radian"
+    creates: /home/{{ ansible_user_id }}/miniconda3/bin/radian
+  args:
+    executable: /bin/bash
 
 - name: LINK ; put symlink to radian binary in /opt/
   become: true
   file:
-    src: "/home/{{ ansible_user_id }}/.local/bin/radian"
+    src: "/home/{{ ansible_user_id }}/miniconda3/bin/radian"
     path: /opt/radian
     state: link
 

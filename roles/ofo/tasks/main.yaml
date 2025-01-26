@@ -16,9 +16,9 @@
     - irods.yaml
     - geograypher.yaml
     - qgis.yaml
-    - r.yaml
     - anaconda.yaml
     - metashape.yaml
+    - r.yaml
     - sublime.yaml
     - jupyter.yaml
     - rstudio_ssl.yaml
@@ -29,3 +29,13 @@
   loop:
     - setup_private_folder.yaml
   when: RUN_PRIVATE == 'yes'
+
+- name: APT ; update and upgrade system packages
+  become: true
+  apt:
+    upgrade: dist
+    update_cache: yes
+  register: apt_result
+  until: apt_result is not failed
+  retries: 2
+  delay: 10

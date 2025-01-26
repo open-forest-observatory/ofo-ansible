@@ -1,5 +1,5 @@
 [remote]
-149.165.153.78 ansible_user=exouser
+derek-ofodev.bio220124.projects.jetstream-cloud.org ansible_user=exouser
 
 [local]
 127.0.0.1 ansible_user=exouser
