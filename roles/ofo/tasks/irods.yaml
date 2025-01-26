@@ -19,7 +19,7 @@
 - name: APT_REPOSITORY | add the irods repo
   become: true
   ansible.builtin.apt_repository:
-    repo: "deb [arch=amd64] https://packages.irods.org/apt/ focal main"
+    repo: "deb [arch=amd64] https://packages.irods.org/apt/ noble main"
     state: present
   ignore_errors: true
 
