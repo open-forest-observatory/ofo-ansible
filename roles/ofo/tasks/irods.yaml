@@ -1,13 +1,13 @@
 ---
 
-- name: APT ; install libssl
-  become: true
-  apt:
-    deb: http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/{{ LIBSSL_DEB }}
-  register: apt_result
-  until: apt_result is not failed
-  retries: 2
-  delay: 10
+# - name: APT ; install libssl
+#   become: true
+#   apt:
+#     deb: http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/{{ LIBSSL_DEB }}
+#   register: apt_result
+#   until: apt_result is not failed
+#   retries: 2
+#   delay: 10
 
 - name: APT_KEY ; add the irods key
   become: true
@@ -34,3 +34,18 @@
   retries: 2
   delay: 10
   ignore_errors: true
+
+# Might be unnecessary, if this was created by irods install
+- name: ensures irods config dir exists
+  file: 
+    path: "/home/{{ ansible_user }}/.irods/"
+    state: directory
+
+- name: COPY ; copy irods anonymous config onto vm
+  become: true
+  copy:
+    src: irods_environment.json
+    dest: "/home/{{ ansible_user }}/.irods/irods_environment.json"
+    # follwing 2 lines probably unnecessary
+    # group: "{{ ansible_user }}"
+    # owner: "{{ ansible_user }}"
