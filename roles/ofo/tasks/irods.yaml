@@ -46,6 +46,5 @@
   copy:
     src: irods_environment.json
     dest: "/home/{{ ansible_user }}/.irods/irods_environment.json"
-    # follwing 2 lines probably unnecessary
-    # group: "{{ ansible_user }}"
-    # owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    owner: "{{ ansible_user }}"
