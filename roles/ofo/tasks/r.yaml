@@ -200,17 +200,17 @@
 #     name: radian
 #     state: present
 
-- name: SHELL ; install radian module in base conda env (and its gcc dependency)
+- name: SHELL ; install radian module in a new conda env
   shell:
-    cmd: "~/miniconda3/bin/conda install -y -c conda-forge gcc radian"
-    creates: /home/{{ ansible_user_id }}/miniconda3/bin/radian
+    cmd: "~/miniconda3/bin/conda create -n radian-env -y -c conda-forge radian"
+    creates: /home/{{ ansible_user_id }}/miniconda3/envs/radian-env/bin/radian
   args:
     executable: /bin/bash
 
 - name: LINK ; put symlink to radian binary in /opt/
   become: true
   file:
-    src: "/home/{{ ansible_user_id }}/miniconda3/bin/radian"
+    src: "/home/{{ ansible_user_id }}/miniconda3/envs/radian-env/bin/radian"
     path: /opt/radian
     state: link
 
