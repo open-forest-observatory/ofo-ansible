@@ -178,6 +178,13 @@
   retries: 3
   delay: 10
   when: INSTALL_R_PACKAGES | bool
+
+  
+- name: Install package 'unixtools' from R-Forge (not a part of R2U)
+  command: R -e "install.packages('unixtools', repos='http://www.rforge.net/')"
+  ignore_errors: yes  # Handle cases where the package might already be installed
+  when: INSTALL_R_PACKAGES | bool
+
   
 - name: SHELL ; use Rscript to install bspm
   become: true
