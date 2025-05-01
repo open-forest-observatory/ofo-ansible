@@ -31,3 +31,15 @@
     dest: /opt/setup-private-folder.sh
     mode: 0744
     owner: "{{ ansible_user }}"
+
+# Implementing this suggestion from JS2 support: Try editing
+# /etc/nvidia-container-runtime/config.toml ; uncomment the user = "root:video" line, and change it
+# to user = "root:root"
+- name: Fix NVIDIA container runtime config
+  become: true
+  ini_file:
+    path: /etc/nvidia-container-runtime/config.toml
+    section: nvidia-container-cli
+    option: user
+    value: root:root
+    state: present
