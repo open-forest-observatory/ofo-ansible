@@ -12,13 +12,13 @@
   loop:
     - ssh_timeout.yaml
     - misc.yaml
+    - r.yaml
     - ofo-share.yaml
     - irods.yaml
     - geograypher.yaml
     - qgis.yaml
     - anaconda.yaml
     - metashape.yaml
-    - r.yaml
     - sublime.yaml
     - jupyter.yaml
     - rstudio_ssl.yaml
