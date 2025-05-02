@@ -41,5 +41,5 @@
     path: /etc/nvidia-container-runtime/config.toml
     section: nvidia-container-cli
     option: user
-    value: root:root
+    value: '"root:root"'
     state: present
