@@ -11,12 +11,12 @@
   include_tasks: "{{ item }}"
   loop:
     - ssh_timeout.yaml
+    - anaconda.yaml
     - misc.yaml
     - ofo-share.yaml
     - irods.yaml
     - geograypher.yaml
     - qgis.yaml
-    - anaconda.yaml
     - metashape.yaml
     - r.yaml
     - sublime.yaml
