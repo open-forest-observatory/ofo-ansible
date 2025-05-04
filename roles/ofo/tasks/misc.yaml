@@ -17,6 +17,7 @@
       - wget
       - ca-certificates
       - yadm
+      - libimage-exiftool-perl
     state: present
     update_cache: yes
   register: apt_result
@@ -43,3 +44,10 @@
     option: user
     value: '"root:root"'
     state: present
+
+- name: SHELL ; install untwine in new conda env
+  shell:
+    cmd: "~/miniconda3/bin/conda create -n untwine -y -c conda-forge untwine"
+    creates: /home/{{ ansible_user_id }}/miniconda3/envs/untwine/bin/untwine
+  args:
+    executable: /bin/bash
