@@ -51,3 +51,21 @@
     creates: /home/{{ ansible_user_id }}/miniconda3/envs/untwine/bin/untwine
   args:
     executable: /bin/bash
+
+
+# Copy rclone config file for OFO OSN bucket
+- name: CREATE DIRECTORY ; create rclone config directory
+  become: true
+  file:
+    path: /home/{{ ansible_user }}/.config/rclone
+    state: directory
+    owner: "{{ ansible_user }}"
+    mode: 0755
+
+- name: COPY ; copy rclone config file
+  become: true
+  copy:
+    src: rclone.conf
+    dest: /home/{{ ansible_user }}/.config/rclone/rclone.conf
+    mode: 0644
+    owner: "{{ ansible_user }}"
