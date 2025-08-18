@@ -210,7 +210,7 @@
 
 - name: SHELL ; install radian module in a new conda env
   shell:
-    cmd: "~/miniconda3/bin/conda create -n radian-env -y -c conda-forge radian"
+    cmd: "~/miniconda3/bin/conda create -n radian-env -y -c conda-forge radian --override-channels --channel conda-forge"
     creates: /home/{{ ansible_user_id }}/miniconda3/envs/radian-env/bin/radian
   args:
     executable: /bin/bash

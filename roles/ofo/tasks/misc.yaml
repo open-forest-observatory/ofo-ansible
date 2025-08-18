@@ -47,7 +47,7 @@
 
 - name: SHELL ; install untwine in new conda env
   shell:
-    cmd: "~/miniconda3/bin/conda create -n untwine -y -c conda-forge untwine"
+    cmd: "~/miniconda3/bin/conda create -n untwine -y -c conda-forge untwine --override-channels --channel conda-forge"
     creates: /home/{{ ansible_user_id }}/miniconda3/envs/untwine/bin/untwine
   args:
     executable: /bin/bash

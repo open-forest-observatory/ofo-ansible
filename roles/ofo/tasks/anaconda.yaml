@@ -19,21 +19,40 @@
   args:
     executable: /bin/bash
 
-- name: SHELL ; update conda & miniconda
+# IMPORTANT: Configure conda-forge BEFORE any conda operations
+- name: Configure conda to use conda-forge exclusively
   shell:
-    cmd: ~/miniconda3/bin/conda update --all --yes
+    cmd: |
+      # Remove ALL default channels first
+      ~/miniconda3/bin/conda config --remove channels defaults || true
+      ~/miniconda3/bin/conda config --remove channels https://repo.anaconda.com/pkgs/main || true  
+      ~/miniconda3/bin/conda config --remove channels https://repo.anaconda.com/pkgs/r || true
+      ~/miniconda3/bin/conda config --remove channels pkgs/main || true
+      ~/miniconda3/bin/conda config --remove channels pkgs/r || true
+      # Add conda-forge as the only channel
+      ~/miniconda3/bin/conda config --add channels conda-forge
+      ~/miniconda3/bin/conda config --set channel_priority strict
+      # Show final config
+      ~/miniconda3/bin/conda config --show channels
   args:
     executable: /bin/bash
 
-- name: SHELL ; conda install nb_conda_kernels
+# Use --override-channels to force conda-forge only
+- name: SHELL ; update conda & miniconda from conda-forge only
   shell:
-    cmd: ~/miniconda3/bin/conda install -n base notebook nb_conda_kernels --yes
+    cmd: ~/miniconda3/bin/conda update --all --yes --override-channels --channel conda-forge
   args:
     executable: /bin/bash
 
-- name: SHELL ; run conda create --name meta python=3.11 PyYaml ipykernel
+- name: SHELL ; conda install nb_conda_kernels from conda-forge only
   shell:
-    cmd: ~/miniconda3/bin/conda create --name meta python=3.11 PyYaml ipykernel --yes
+    cmd: ~/miniconda3/bin/conda install -n base notebook nb_conda_kernels --yes --override-channels --channel conda-forge
+  args:
+    executable: /bin/bash
+
+- name: SHELL ; run conda create --name meta python=3.11 PyYaml ipykernel from conda-forge only
+  shell:
+    cmd: ~/miniconda3/bin/conda create --name meta python=3.11 PyYaml ipykernel --yes --override-channels --channel conda-forge
   args:
     creates: ~/miniconda3/envs/meta
 
@@ -47,3 +66,4 @@
 - name: SHELL ; run conda config --append pkgs_dirs ~/miniconda3/pkgs
   shell:
     cmd: ~/miniconda3/bin/conda config --append pkgs_dirs ~/miniconda3/pkgs
+    
