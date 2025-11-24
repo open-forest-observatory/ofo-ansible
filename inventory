@@ -1,5 +1,6 @@
 [remote]
-149.165.150.76 ansible_user=exouser
+149.165.173.128 ansible_user=exouser
+149.165.173.221 ansible_user=exouser
 
 [local]
 127.0.0.1 ansible_user=exouser

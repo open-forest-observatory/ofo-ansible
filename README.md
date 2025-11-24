@@ -12,7 +12,10 @@ This is the smoothest way to apply the configuration, though it requires you:
 
 If the IP address of the instance to be configured is different from the one listed in the repo's top-level `inventory` file (under the `[remote]` heading), edit the file and update the IP address to the current public IP address of the instance to be configured.
 
-Then run (from any machine that is allowed to SSH into the VM) `ansible-playbook -i inventory playbook.yml`.
+Then run the following, from any machine that is allowed to SSH into the VM:
+`ansible-playbook -i inventory playbook.yml -e MANILA_ACCESS_KEY=<manila-access-key>`
+
+You can find the Manila share access key in the [OFO password vault](vault.focal-lab.org).
 
 
 ## Applying via pull from the machine to be configured
@@ -23,8 +26,10 @@ SSH into the machine to be configured, then run:
 sudo add-apt-repository --yes --update ppa:ansible/ansible
 sudo apt-get install ansible-core -y
 ansible-galaxy collection install ansible.posix
-ansible-pull -U https://github.com/open-forest-observatory/ofo-ansible -i inventory
+ansible-pull -U https://github.com/open-forest-observatory/ofo-ansible -i inventory -e MANILA_ACCESS_KEY=<manila-access-key>
 ```
+
+You can find the Manila share access key in the [OFO password vault](vault.focal-lab.org).
 
 If you want to specify a branch of the repo other than `main`, add `-C <branchname>`.
 

@@ -1,8 +1,43 @@
 ---
+# New Manila ofo-share
 - name: FILE ; ensure the share directory exists
   become: true
   file:
     path: "/ofo-share"
+    state: directory
+    mode: '0755'
+
+- name: COPY ; create ceph keyring file
+  become: true
+  copy:
+    dest: "/etc/ceph/ceph.client.ofo-share-02-rw.keyring"
+    content: |
+      [client.ofo-share-02-rw]
+          key = {{ MANILA_ACCESS_KEY }}
+    mode: '0600'
+
+- name: MOUNT ; mount the ceph share
+  become: true
+  mount:
+    src: "149.165.158.38:6789,149.165.158.22:6789,149.165.158.54:6789,149.165.158.70:6789,149.165.158.86:6789:/volumes/_nogroup/97fadc98-e9c5-4869-b791-c771f00512af/d84f95ab-20a4-4c9b-8fe7-8bc0eacc3b6c"
+    fstype: ceph
+    opts: "name=ofo-share-02-rw,x-systemd.device-timeout=30,x-systemd.mount-timeout=30,noatime,_netdev,rw"
+    path: "/ofo-share"
+    state: mounted
+
+- name: FILE ; set ownership on mount point
+  become: true
+  file:
+    path: "/ofo-share"
+    owner: exouser
+    group: exouser
+
+
+# Old NFS ofo-share
+- name: FILE ; ensure the share directory exists
+  become: true
+  file:
+    path: "/z_OLD_ofo-share"
     state: directory
     mode: '0750'
     
@@ -24,5 +59,5 @@
     src: 10.0.205.254:/ofo-share-serve
     fstype: nfs
     opts: timeo=14
-    path: "/ofo-share"
+    path: "/z_OLD_ofo-share"
     state: mounted
