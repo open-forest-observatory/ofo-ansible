@@ -202,6 +202,29 @@
     line: 'suppressMessages(bspm::enable())'
   become: true
 
+# R >= 4.6.0 no longer calls a .First.sys() that has been reassigned in
+# globalenv() during startup, which is exactly the trick vscode-R (and
+# RStudio/ESS) use, via R_PROFILE_USER, to attach their session watcher and
+# httpgd plot device. Without this, plots silently fall back to the base
+# pdf() device (a silent Rplots.pdf in the working dir) with no error, and
+# the VS Code status bar sits at "R: (not attached)". .First() is still
+# honored, so invoke the staged .First.sys ourselves from there. This is a
+# known, still-open upstream bug: https://github.com/REditorSupport/vscode-R/issues/1696
+# Remove this once that's fixed in a released version of the extension.
+- name: BLOCKINFILE ; workaround vscode-R .First.sys not being called on R >= 4.6.0 (see https://github.com/REditorSupport/vscode-R/issues/1696)
+  ansible.builtin.blockinfile:
+    path: /usr/lib/R/etc/Rprofile.site
+    marker: "# {mark} ANSIBLE MANAGED BLOCK - vscode-R .First.sys workaround"
+    block: |
+      .First <- function() {
+          if (exists(".First.sys", envir = globalenv(), inherits = FALSE)) {
+              f <- get(".First.sys", envir = globalenv(), inherits = FALSE)
+              rm(".First.sys", envir = globalenv())
+              f()
+          }
+      }
+  become: true
+
 # - name: PIP ; use PIP to install radian R terminal
 #   become: false
 #   pip:
